@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "79286378982",
+    "firebase_url": "https://agentnetworking-c738a.firebaseio.com",
+    "project_id": "agentnetworking-c738a",
+    "storage_bucket": "agentnetworking-c738a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79286378982:android:ab8b5016a060cd6a",
+        "android_client_info": {
+          "package_name": "com.example.islam.agentnetworking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79286378982-t7lfk696skairsju6godt190091tgor5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD64BqKvsT7s9v92TwlOrlK3SlQNUeSw_E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79286378982-t7lfk696skairsju6godt190091tgor5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
