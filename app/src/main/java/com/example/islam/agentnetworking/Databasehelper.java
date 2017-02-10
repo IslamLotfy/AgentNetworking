@@ -34,8 +34,8 @@ public class Databasehelper  {
         DatabaseReference child=FirebaseDatabase.getInstance().getReference("networks").child(net.getuId());
         child.setValue(net);
     }
-    public void readPosts(){
-        final List<stringHolder> posts=new LinkedList<stringHolder>();
+    public List<Post> readPosts(){
+        final List<Post> posts=new LinkedList<Post>();
         databaseReference= FirebaseDatabase.getInstance().getReference("posts");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -44,7 +44,7 @@ public class Databasehelper  {
                     Post post = singleSnapshot.getValue(Post.class);
                     posts.add(post);
                 }
-                listener.onDatabaseSuccess(posts);
+                //listener.onDatabaseSuccess(posts);
             }
 
             @Override
@@ -52,9 +52,10 @@ public class Databasehelper  {
 
             }
         });
+        return posts;
     }
-    public void readUsers(){
-        final List<stringHolder> users=new LinkedList<stringHolder>();
+    public List<User> readUsers(){
+        final List<User> users=new LinkedList<User>();
         databaseReference=FirebaseDatabase.getInstance().getReference("users");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -63,7 +64,7 @@ public class Databasehelper  {
                     User user = singleSnapshot.getValue(User.class);
                     users.add(user);
                 }
-                listener.onDatabaseSuccess(users);
+                //listener.onDatabaseSuccess(users);
             }
 
             @Override
@@ -71,9 +72,10 @@ public class Databasehelper  {
 
             }
         });
+        return users;
     }
-    public void readNetworks(){
-        final List<stringHolder> nets=new LinkedList<stringHolder>();
+    public List<Network> readNetworks(){
+        final List<Network> nets=new LinkedList<Network>();
         databaseReference=FirebaseDatabase.getInstance().getReference("networks");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -82,7 +84,7 @@ public class Databasehelper  {
                     Network net=ds.getValue(Network.class);
                     nets.add(net);
                 }
-                listener.onDatabaseSuccess(nets);
+                //listener.onDatabaseSuccess(nets);
             }
 
             @Override
@@ -90,15 +92,15 @@ public class Databasehelper  {
 
             }
         });
+        return nets;
     }
-    public void getUser(String uid){
+    public User getUser(String uid){
         databaseReference=FirebaseDatabase.getInstance().getReference("users").child(uid);
-        final List<stringHolder> users=new LinkedList<stringHolder>();
+        final User[] user = new User[1];
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                users.add(dataSnapshot.getValue(User.class));
-                listener.onDatabaseSuccess(users);
+                user[0] =dataSnapshot.getValue(User.class);
             }
 
             @Override
@@ -106,6 +108,7 @@ public class Databasehelper  {
 
             }
         });
+        return user[0];
     }
     public static Databasehelper getInstance(Databaselistener listener){
         if(instance==null){

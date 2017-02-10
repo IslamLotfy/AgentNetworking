@@ -17,31 +17,32 @@
         android:id="@+id/networkview"
         android:layout_weight="0.7">
     </android.support.v7.widget.RecyclerView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
         android:layout_below="@+id/networkview"
         android:layout_weight="0.3"
         android:weightSum="0.3">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/nextbtn"
-            android:layout_weight="0.1"
+            android:id="@+id/backbtn"
+            android:layout_alignParentLeft="true"
             android:text="back"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/backbtn"
-            android:layout_weight="0.1"
+            android:id="@+id/nextbtn"
+            android:layout_toRightOf="@+id/backbtn"
+            android:layout_toLeftOf="@+id/skipbtn"
             android:text="next"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/skipbtn"
-            android:layout_weight="0.1"
+            android:layout_alignParentRight="true"
             android:text="skip"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

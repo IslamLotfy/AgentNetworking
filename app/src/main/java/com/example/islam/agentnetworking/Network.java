@@ -21,7 +21,7 @@ public class Network extends stringHolder {
         this.name=name;
         this.uId=uId;
         UsersId =new LinkedList<String>();
-
+        PostsId=new LinkedList<String >();
     }
     public Network(){
        this("",false,"");
