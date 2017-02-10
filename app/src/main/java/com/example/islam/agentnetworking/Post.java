@@ -9,34 +9,29 @@ import java.util.List;
  * Created by islam on 07/02/17.
  */
 
-public class Post {
-    private Uri uri;
+public class Post extends stringHolder {
+    private String uri;
     private String title;
     private String desc;
-    private List<String> agents;
-    private List<String> networks;
+    private String postId;
 
     public Post(){
-        uri=null;
-        title=null;
-        desc=null;
-        agents=new LinkedList<String>();
-        networks=new LinkedList<String>();
+        this("","","","");
     }
 
-    public Post(Uri uri, String title, String desc, List<String> agents, List<String> networks) {
+    public Post(String uri, String title, String desc,String postId) {
+        super("post",false);
         this.uri = uri;
         this.title = title;
         this.desc = desc;
-        this.agents = agents;
-        this.networks = networks;
+        this.postId=postId;
     }
 
-    public Uri getUri() {
+    public String getUri() {
         return uri;
     }
 
-    public void setUri(Uri uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 
@@ -56,19 +51,11 @@ public class Post {
         this.desc = desc;
     }
 
-    public List<String> getAgents() {
-        return agents;
+    public String getPostId() {
+        return postId;
     }
 
-    public void setAgents(List<String> agents) {
-        this.agents = agents;
-    }
-
-    public List<String> getNetworks() {
-        return networks;
-    }
-
-    public void setNetworks(List<String> networks) {
-        this.networks = networks;
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 }

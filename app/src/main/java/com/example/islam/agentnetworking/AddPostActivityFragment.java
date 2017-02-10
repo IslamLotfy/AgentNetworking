@@ -30,6 +30,7 @@ public class AddPostActivityFragment extends Fragment {
     private ImageButton imagebtn;
     private Button postbtn;
     private Post post;
+    private User user;
     public AddPostActivityFragment() {
     }
 
@@ -42,6 +43,7 @@ public class AddPostActivityFragment extends Fragment {
         desc = (EditText)view.findViewById(R.id.postdesc);
         postbtn =(Button) view.findViewById(R.id.postbtn);
         post=new Post();
+        user=(User) getActivity().getIntent().getSerializableExtra("user");
         imagebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,11 +62,12 @@ public class AddPostActivityFragment extends Fragment {
     public void addPost() {
         post.setTitle(title.getText().toString());
         post.setDesc(desc.getText().toString());
-        post.setUri(imageUri);
+        post.setUri(imageUri.toString());
         Log.d("post ",post.getTitle());
         Log.d("post ",post.getDesc());
         Log.d("post ",post.getUri().toString());
         Intent intent=new Intent(getContext(),NetworkListActivity.class);
+        intent.putExtra("user",user);
         startActivity(intent);
     }
 

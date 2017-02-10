@@ -5,6 +5,6 @@ package com.example.islam.agentnetworking;
  */
 
 public interface authenticationListener {
-    public void onSuccess();
-    public void onFailure();
+    public void onAuthSuccess();
+    public void onAuthFailure();
 }

@@ -15,6 +15,28 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:background="@color/blue"
+        android:textColor="@color/white"
+        android:hint="first name .."
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:padding="@dimen/appbar_padding_top"
+        android:id="@+id/firstname"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:background="@color/blue"
+        android:textColor="@color/white"
+        android:hint="second name .."
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:padding="@dimen/appbar_padding_top"
+        android:id="@+id/secondname"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:background="@color/blue"
         android:textColor="@color/white"

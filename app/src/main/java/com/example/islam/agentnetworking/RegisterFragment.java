@@ -1,6 +1,7 @@
 package com.example.islam.agentnetworking;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,17 +11,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RegisterFragment extends Fragment implements authenticationListener {
+public class RegisterFragment extends Fragment implements authenticationListener,Databaselistener {
 
     private EditText emailfield;
     private EditText passfield;
     private EditText confirmfield;
     private Button signupbtn;
+    private EditText namefield1;
+    private EditText namefield2;
     private Authentication auth;
     private ProgressDialog pd;
+    private String mail;
+    private String pass;
+    private String confirmpass;
+    private String firstname;
+    private String secondname;
+    private User user;
+    private Databasehelper databasehelper;
     public RegisterFragment() {
     }
 
@@ -31,10 +44,11 @@ public class RegisterFragment extends Fragment implements authenticationListener
         emailfield=(EditText) view.findViewById(R.id.emailfield);
         passfield=(EditText)view.findViewById(R.id.passfield);
         confirmfield=(EditText)view.findViewById(R.id.confirmfield);
+        namefield1=(EditText)view.findViewById(R.id.firstname);
+        namefield2=(EditText)view.findViewById(R.id.secondname);
         signupbtn=(Button)view.findViewById(R.id.signupbtn);
-        auth=Authentication.getInstance(this);
         pd=new ProgressDialog(getContext());
-
+        databasehelper=Databasehelper.getInstance(this);
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,20 +59,37 @@ public class RegisterFragment extends Fragment implements authenticationListener
     }
 
     @Override
-    public void onSuccess() {
+    public void onAuthSuccess() {
         pd.dismiss();
-        Toast.makeText(getContext(),"You are registred succfully !",Toast.LENGTH_LONG).show();
+        user=new User(firstname,secondname,auth.getUserId(),"");
+        databasehelper.writeUser(user);
+        Toast.makeText(getContext(),auth.getUserId(),Toast.LENGTH_LONG).show();
+        Intent intent=new Intent(getContext(),Login.class);
+        startActivity(intent);
         getActivity().finish();
     }
 
     @Override
-    public void onFailure() {
+    public void onDatabaseSuccess(List<stringHolder> list) {
+
+    }
+
+    @Override
+    public void onDatabaseFailure() {
+
+    }
+
+    @Override
+    public void onAuthFailure() {
         Toast.makeText(getContext(),"You are not registred ! \n please try again !",Toast.LENGTH_LONG).show();
     }
     public void signup(){
-        String mail=emailfield.getText().toString();
-        String pass=passfield.getText().toString();
-        String confirmpass=confirmfield.getText().toString();
+         auth=Authentication.getInstance(this);
+         mail=emailfield.getText().toString();
+         pass=passfield.getText().toString();
+         confirmpass=confirmfield.getText().toString();
+         firstname=namefield1.getText().toString();
+         secondname=namefield2.getText().toString();
         if(!mail.equals("")&&!pass.equals("")&&!confirmpass.equals("")){
             if(pass.equals(confirmpass)){
                 if(pass.length()>=6){

@@ -1,6 +1,5 @@
 package com.example.islam.agentnetworking;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -26,9 +25,9 @@ public class Authentication {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    listener.onSuccess();
+                    listener.onAuthSuccess();
                 }else{
-                    listener.onFailure();
+                    listener.onAuthFailure();
                 }
             }
         });
@@ -39,13 +38,13 @@ public class Authentication {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    listener.onSuccess();
+                    listener.onAuthSuccess();
                 }else{
-                    listener.onFailure();
+                    listener.onAuthFailure();
                 }
             }
         });
-
+        
 
     }
     public void logout(){
@@ -58,34 +57,10 @@ public class Authentication {
        return firebaseAuth.getCurrentUser().getUid();
     }
 
-//    public void sendVerificationEmail(String email){
-//        String code = UUID.randomUUID().toString();
-//        Intent i = new Intent(Intent.ACTION_SEND);
-//        i.setType("message/rfc822");
-//        i.putExtra(Intent.EXTRA_EMAIL, email);
-//        i.putExtra(Intent.EXTRA_SUBJECT, "confirmation code ");
-//        i.putExtra(Intent.EXTRA_TEXT, code);
-//        try {
-//             context.startActivity(Intent.createChooser(i, "Send mail..."));
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            listener.onFailure();
-//        }
-//    }
-//    public void resetUserPassword(String email){
-//        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful()){
-//                    listener.onSuccess();
-//                }else{
-//                    listener.onFailure();
-//                }
-//            }
-//        });
-//    }
     public static Authentication getInstance(authenticationListener listener){
         if(instance==null){
-            return new Authentication(listener);
+            instance=new Authentication(listener);
+            return instance;
         }else
             return instance;
     }

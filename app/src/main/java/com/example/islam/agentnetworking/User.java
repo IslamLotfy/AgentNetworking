@@ -2,30 +2,31 @@ package com.example.islam.agentnetworking;
 
 import android.provider.Contacts;
 
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by islam on 07/02/17.
  */
 
-public class User extends stringHolder{
+public class User extends stringHolder implements Serializable{
     private String firstName;
     private String lastName;
-    private String network;
+    private String networkId;
     private String uId;
     private String email;
-    private String pass;
-    public User(String name, String s, boolean b){
-        super(name,s,b);
-        firstName="";
-        lastName="";
-        network="";
-        uId="";
+    private List<String> PostsId;
+    public User(){
+        this("","","","");
     }
     public User(String firstName,String lastName ,String uid,String network){
-        super(firstName+lastName,uid,false);
+        super(firstName+lastName,false);
         this.firstName=firstName;
         this.lastName=lastName;
         uId=uid;
-        this.network=network;
+        this.networkId=network;
+        PostsId=new LinkedList<String>();
     }
 
     public String getLastName() {
@@ -53,11 +54,11 @@ public class User extends stringHolder{
     }
 
     public String getNetwork() {
-        return network;
+        return networkId;
     }
 
     public void setNetwork(String network) {
-        this.network = network;
+        this.networkId = network;
     }
 
     public String getEmail() {
@@ -68,11 +69,13 @@ public class User extends stringHolder{
         this.email = email;
     }
 
-    public String getPass() {
-        return pass;
+    public List<String> getPostsId() {
+        return PostsId;
     }
-
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPostsId(List<String> postsId) {
+        PostsId = postsId;
+    }
+    public void pushPostId(String postId){
+        PostsId.add(postId);
     }
 }

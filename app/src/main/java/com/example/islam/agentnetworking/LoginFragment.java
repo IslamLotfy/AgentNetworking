@@ -11,17 +11,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class LoginFragment extends Fragment implements authenticationListener {
+public class LoginFragment extends Fragment implements authenticationListener,Databaselistener {
 
     private EditText mailfield;
     private EditText passfield;
     private Button loginbtn;
     private Button signupbtn;
     private Authentication auth;
-    ProgressDialog pd;
+    private ProgressDialog pd;
+
+
     public LoginFragment() {
     }
 
@@ -33,9 +37,7 @@ public class LoginFragment extends Fragment implements authenticationListener {
         passfield=(EditText)view.findViewById(R.id.passwordfield);
         loginbtn=(Button)view.findViewById(R.id.signinbtn);
         signupbtn=(Button)view.findViewById(R.id.signup);
-        auth=Authentication.getInstance(this);
         pd=new ProgressDialog(getContext());
-
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +55,7 @@ public class LoginFragment extends Fragment implements authenticationListener {
     }
 
     public void loging(){
+        auth=Authentication.getInstance(this);
         String mail=mailfield.getText().toString();
         String pass=passfield.getText().toString();
         if(mail!=null&&pass!=null){
@@ -68,9 +71,10 @@ public class LoginFragment extends Fragment implements authenticationListener {
     public void signup(){
         Intent intent=new Intent(getContext(),Register.class);
         startActivity(intent);
+        getActivity().finish();
     }
     @Override
-    public void onSuccess() {
+    public void onAuthSuccess() {
         pd.dismiss();
         Intent intent=new Intent(getContext(),MainActivity.class);
         startActivity(intent);
@@ -78,8 +82,20 @@ public class LoginFragment extends Fragment implements authenticationListener {
     }
 
     @Override
-    public void onFailure() {
+    public void onAuthFailure() {
         pd.dismiss();
         Toast.makeText(getContext()," an error occured\n please try again !",Toast.LENGTH_LONG);
+    }
+
+
+
+    @Override
+    public void onDatabaseSuccess(List<stringHolder> list) {
+
+    }
+
+    @Override
+    public void onDatabaseFailure() {
+
     }
 }

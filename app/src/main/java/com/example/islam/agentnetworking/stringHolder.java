@@ -6,17 +6,14 @@ package com.example.islam.agentnetworking;
 
 public class stringHolder {
     private String name;
-    private String id;
     private boolean selected;
 
     public stringHolder (){
         name=null;
-        id=null;
         selected=false;
     }
-    public stringHolder(String name, String id,boolean selected) {
+    public stringHolder(String name,boolean selected) {
         this.name = name;
-        this.id = id;
         this.selected=selected;
     }
 
@@ -26,14 +23,6 @@ public class stringHolder {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public boolean isSelected() {
