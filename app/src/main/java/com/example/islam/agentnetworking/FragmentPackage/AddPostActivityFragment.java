@@ -1,4 +1,4 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.FragmentPackage;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.example.islam.agentnetworking.ActivityPackage.NetworkListActivity;
+import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
+import com.example.islam.agentnetworking.ModelsPackage.PostModel;
+import com.example.islam.agentnetworking.R;
+import com.example.islam.agentnetworking.ModelsPackage.UserModel;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -27,10 +32,11 @@ public class AddPostActivityFragment extends Fragment {
     private Uri imageUri;
     private EditText title;
     private EditText desc;
-    private ImageButton imagebtn;
-    private Button postbtn;
-    private Post post;
-    private User user;
+    private ImageButton imageButton;
+    private Button postButton;
+    private PostModel postModel;
+    private DatabaseHelper databaseHelper;
+
     public AddPostActivityFragment() {
     }
 
@@ -38,19 +44,19 @@ public class AddPostActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_add_post, container, false);
-        imagebtn=(ImageButton)view.findViewById(R.id.imgetbtn);
+        imageButton =(ImageButton)view.findViewById(R.id.imgetbtn);
         title =(EditText)view.findViewById(R.id.posttitle);
         desc = (EditText)view.findViewById(R.id.postdesc);
-        postbtn =(Button) view.findViewById(R.id.postbtn);
-        post=new Post();
-        user=(User) getActivity().getIntent().getSerializableExtra("user");
-        imagebtn.setOnClickListener(new View.OnClickListener() {
+        postButton =(Button) view.findViewById(R.id.postbtn);
+        postModel =new PostModel();
+        databaseHelper=DatabaseHelper.getInstance();
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                operGallery();
+                openGallery();
             }
         });
-        postbtn.setOnClickListener(new View.OnClickListener() {
+        postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addPost();
@@ -60,18 +66,17 @@ public class AddPostActivityFragment extends Fragment {
     }
 
     public void addPost() {
-        post.setTitle(title.getText().toString());
-        post.setDesc(desc.getText().toString());
-        post.setUri(imageUri.toString());
-        Log.d("post ",post.getTitle());
-        Log.d("post ",post.getDesc());
-        Log.d("post ",post.getUri().toString());
-        Intent intent=new Intent(getContext(),NetworkListActivity.class);
-        intent.putExtra("user",user);
+        postModel.setTitle(title.getText().toString());
+        postModel.setDesc(desc.getText().toString());
+        postModel.setUri(imageUri.toString());
+        postModel.setPostId(UUID.randomUUID().toString());
+        databaseHelper.writePost(postModel);
+        Intent intent=new Intent(getActivity(),NetworkListActivity.class);
+        intent.putExtra("post", postModel);
         startActivity(intent);
     }
 
-    public void operGallery(){
+    public void openGallery(){
         Intent galleryIntent = new Intent(
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -84,7 +89,7 @@ public class AddPostActivityFragment extends Fragment {
         if(requestCode==RESULT_GALLERY && resultCode==RESULT_OK){
             imageUri=data.getData();
             System.out.println(imageUri.toString());
-            imagebtn.setImageURI(imageUri);
+            imageButton.setImageURI(imageUri);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.ModelsPackage;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,23 +7,24 @@ import java.util.List;
  * Created by islam on 10/02/17.
  */
 
-public class Network extends stringHolder {
+public class NetworkModel  {
 
     private String uId;
     private String name;
     private List<String> UsersId;
     private List<String> PostsId;
-    public Network(String name,boolean b){
+    private ChoiceListModel choiceListModel;
+    public NetworkModel(String name, boolean b){
         this(name,b,"");
     }
-    public Network(String name,boolean b,String uId){
-        super(name,b);
+    public NetworkModel(String name, boolean b, String uId){
         this.name=name;
         this.uId=uId;
         UsersId =new LinkedList<String>();
         PostsId=new LinkedList<String >();
+        choiceListModel=new ChoiceListModel(name,false);
     }
-    public Network(){
+    public NetworkModel(){
        this("",false,"");
     }
     public String getuId() {
@@ -58,13 +59,19 @@ public class Network extends stringHolder {
         PostsId.add(postid);
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ChoiceListModel getChoiceListModel() {
+        return choiceListModel;
+    }
+
+    public void setChoiceListModel(ChoiceListModel choiceListModel) {
+        this.choiceListModel = choiceListModel;
     }
 }

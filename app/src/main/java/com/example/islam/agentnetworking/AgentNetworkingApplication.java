@@ -10,7 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by islam on 09/02/17.
  */
 
-public class AgentNetworking extends Application {
+public class AgentNetworkingApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/blue"
-    tools:context="com.example.islam.agentnetworking.AddPostActivityFragment"
+    tools:context="com.example.islam.agentnetworking.FragmentPackage.AddPostActivityFragment"
     tools:showIn="@layout/activity_add_post"
     android:weightSum="1">
     <ImageButton

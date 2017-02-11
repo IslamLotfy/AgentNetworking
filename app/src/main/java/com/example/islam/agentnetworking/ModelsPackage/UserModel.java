@@ -1,6 +1,4 @@
-package com.example.islam.agentnetworking;
-
-import android.provider.Contacts;
+package com.example.islam.agentnetworking.ModelsPackage;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -10,23 +8,24 @@ import java.util.List;
  * Created by islam on 07/02/17.
  */
 
-public class User extends stringHolder implements Serializable{
+public class UserModel  implements Serializable{
     private String firstName;
     private String lastName;
     private String networkId;
     private String uId;
     private String email;
     private List<String> PostsId;
-    public User(){
+    private ChoiceListModel choiceListModel;
+    public UserModel(){
         this("","","","");
     }
-    public User(String firstName,String lastName ,String uid,String network){
-        super(firstName+lastName,false);
+    public UserModel(String firstName, String lastName , String uid, String network){
         this.firstName=firstName;
         this.lastName=lastName;
         uId=uid;
         this.networkId=network;
         PostsId=new LinkedList<String>();
+        choiceListModel=new ChoiceListModel(firstName+" "+lastName,false);
     }
 
     public String getLastName() {
@@ -77,5 +76,13 @@ public class User extends stringHolder implements Serializable{
     }
     public void pushPostId(String postId){
         PostsId.add(postId);
+    }
+
+    public ChoiceListModel getChoiceListModel() {
+        return choiceListModel;
+    }
+
+    public void setChoiceListModel(ChoiceListModel choiceListModel) {
+        this.choiceListModel = choiceListModel;
     }
 }

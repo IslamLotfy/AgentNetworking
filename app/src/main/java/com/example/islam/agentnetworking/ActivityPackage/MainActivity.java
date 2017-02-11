@@ -1,10 +1,7 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.ActivityPackage;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,13 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
+import com.example.islam.agentnetworking.ModelsPackage.NetworkModel;
+import com.example.islam.agentnetworking.R;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity   {
@@ -63,7 +58,6 @@ public class MainActivity extends AppCompatActivity   {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
 
 
     }

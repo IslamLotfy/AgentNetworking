@@ -1,26 +1,22 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.ModelsPackage;
 
-import android.net.Uri;
-
-import java.util.LinkedList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by islam on 07/02/17.
  */
 
-public class Post extends stringHolder {
+public class PostModel implements Serializable {
     private String uri;
     private String title;
     private String desc;
     private String postId;
 
-    public Post(){
+    public PostModel(){
         this("","","","");
     }
 
-    public Post(String uri, String title, String desc,String postId) {
-        super("post",false);
+    public PostModel(String uri, String title, String desc, String postId) {
         this.uri = uri;
         this.title = title;
         this.desc = desc;

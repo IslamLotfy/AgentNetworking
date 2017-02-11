@@ -1,20 +1,20 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.ModelsPackage;
 
 /**
- * Created by islam on 07/02/17.
+ * Created by islam on 11/02/17.
  */
 
-public class stringHolder {
+public class ChoiceListModel {
     private String name;
     private boolean selected;
 
-    public stringHolder (){
-        name=null;
-        selected=false;
+    public ChoiceListModel(){
+        this("",false);
     }
-    public stringHolder(String name,boolean selected) {
+
+    public ChoiceListModel(String name, boolean selected) {
         this.name = name;
-        this.selected=selected;
+        this.selected = selected;
     }
 
     public String getName() {
@@ -31,4 +31,5 @@ public class stringHolder {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-    }}
+    }
+}

@@ -1,8 +1,9 @@
-package com.example.islam.agentnetworking;
+package com.example.islam.agentnetworking.FirebaseHelpers;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.islam.agentnetworking.CallBackPackage.AuthenticationListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -12,15 +13,14 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by islam on 08/02/17.
  */
 
-public class Authentication {
-    private static Authentication instance=null;
-    private authenticationListener listener;
+public class Authenticator {
+    private static Authenticator instance=null;
     private FirebaseAuth firebaseAuth;
-    private Authentication(authenticationListener listener){
+    private Authenticator(){
         firebaseAuth=FirebaseAuth.getInstance();
-        this.listener=listener;
+
     }
-    public void register(String email,String pass){
+    public void register(String email, String pass , final AuthenticationListener listener){
         firebaseAuth.createUserWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -32,7 +32,7 @@ public class Authentication {
             }
         });
     }
-    public void login(String email,String pass){
+    public void login(String email, String pass, final AuthenticationListener listener){
         Log.w("TAG.....  " , email+"  000  "+pass);
         firebaseAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -57,9 +57,9 @@ public class Authentication {
        return firebaseAuth.getCurrentUser().getUid();
     }
 
-    public static Authentication getInstance(authenticationListener listener){
+    public static Authenticator getInstance(){
         if(instance==null){
-            instance=new Authentication(listener);
+            instance=new Authenticator();
             return instance;
         }else
             return instance;

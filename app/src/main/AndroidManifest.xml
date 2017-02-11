@@ -5,42 +5,41 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".AgentNetworking"
+        android:name=".AgentNetworkingApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityPackage.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".AddPostActivity"
+            android:name=".ActivityPackage.AddPostActivity"
             android:label="@string/title_activity_add_post"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ActivityPackage.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.islam.agentnetworking.MainActivity" />
+                android:value="com.example.islam.agentnetworking.ActivityPackage.MainActivity" />
         </activity>
         <activity
-            android:name=".NetworkListActivity"
+            android:name=".ActivityPackage.NetworkListActivity"
             android:label="@string/title_activity_network_list"
-            android:parentActivityName=".AddPostActivity"
+            android:parentActivityName=".ActivityPackage.AddPostActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.islam.agentnetworking.AddPostActivity" />
+                android:value="com.example.islam.agentnetworking.ActivityPackage.AddPostActivity" />
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".ActivityPackage.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".Login"/>
+            android:parentActivityName=".ActivityPackage.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Login"
+            android:name=".ActivityPackage.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -48,6 +47,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityPackage.UsersListActivity"
+            android:label="@string/title_activity_users_list"
+            android:parentActivityName=".ActivityPackage.NetworkListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.islam.agentnetworking.ActivityPackage.NetworkListActivity" />
         </activity>
     </application>
 
