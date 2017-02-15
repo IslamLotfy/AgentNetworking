@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.example.islam.agentnetworking.ActivityPackage.MainActivity;
 import com.example.islam.agentnetworking.ActivityPackage.RegisterActivity;
 import com.example.islam.agentnetworking.CallBackPackage.AuthenticationListener;
+import com.example.islam.agentnetworking.CallBackPackage.LoginListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.Authenticator;
 import com.example.islam.agentnetworking.CallBackPackage.DataLoadedListener;
+import com.example.islam.agentnetworking.Presenters.LoginPresenter;
 import com.example.islam.agentnetworking.R;
 
 import java.util.List;
@@ -31,6 +33,7 @@ public class LoginFragment extends Fragment {
     private Button signupButton;
     private Authenticator authenticator;
     private ProgressDialog progressDialog;
+    private LoginPresenter presenter;
 
 
     public LoginFragment() {
@@ -44,7 +47,8 @@ public class LoginFragment extends Fragment {
         passField =(EditText)view.findViewById(R.id.passwordfield);
         loginButton =(Button)view.findViewById(R.id.signinbtn);
         signupButton =(Button)view.findViewById(R.id.signup);
-        progressDialog =new ProgressDialog(getContext());
+        progressDialog =new ProgressDialog(getActivity());
+        presenter=new LoginPresenter();
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,28 +69,24 @@ public class LoginFragment extends Fragment {
         authenticator = Authenticator.getInstance();
         String mail= mailField.getText().toString();
         String pass= passField.getText().toString();
-        if(mail!=null&&pass!=null){
-            progressDialog.setTitle("Loading ");
-            progressDialog.setMessage("please wait...");
-            progressDialog.show();
-            authenticator.login(mail, pass, new AuthenticationListener() {
-                @Override
-                public void onAuthSuccess() {
-                    progressDialog.dismiss();
-                    Intent intent=new Intent(getActivity(),MainActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
+        progressDialog.setTitle("Loading ");
+        progressDialog.setMessage("please wait...");
+        progressDialog.show();
+        presenter.login(mail, pass, new LoginListener() {
+            @Override
+            public void onLoginSuccess() {
+                progressDialog.dismiss();
+                Intent intent=new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
 
-                @Override
-                public void onAuthFailure() {
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity()," an error occured\n please try again !",Toast.LENGTH_LONG);
-                }
-            });
-        }else{
-            Toast.makeText(getActivity(),"please check your mail and password !",Toast.LENGTH_LONG);
-        }
+            @Override
+            public void onLoginFailure() {
+                progressDialog.dismiss();
+                Toast.makeText(getActivity()," an error occured\n please try again !",Toast.LENGTH_SHORT);
+            }
+        });
     }
 
     public void signup(){

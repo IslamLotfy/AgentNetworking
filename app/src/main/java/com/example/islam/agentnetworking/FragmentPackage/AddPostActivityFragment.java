@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.islam.agentnetworking.ActivityPackage.NetworkListActivity;
+import com.example.islam.agentnetworking.CallBackPackage.AddPostListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
 import com.example.islam.agentnetworking.ModelsPackage.PostModel;
+import com.example.islam.agentnetworking.Presenters.AddPostPresenter;
 import com.example.islam.agentnetworking.R;
 import com.example.islam.agentnetworking.ModelsPackage.UserModel;
 
@@ -34,8 +37,7 @@ public class AddPostActivityFragment extends Fragment {
     private EditText desc;
     private ImageButton imageButton;
     private Button postButton;
-    private PostModel postModel;
-    private DatabaseHelper databaseHelper;
+    private AddPostPresenter presenter;
 
     public AddPostActivityFragment() {
     }
@@ -48,8 +50,7 @@ public class AddPostActivityFragment extends Fragment {
         title =(EditText)view.findViewById(R.id.posttitle);
         desc = (EditText)view.findViewById(R.id.postdesc);
         postButton =(Button) view.findViewById(R.id.postbtn);
-        postModel =new PostModel();
-        databaseHelper=DatabaseHelper.getInstance();
+        presenter=new AddPostPresenter();
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,14 +67,24 @@ public class AddPostActivityFragment extends Fragment {
     }
 
     public void addPost() {
-        postModel.setTitle(title.getText().toString());
-        postModel.setDesc(desc.getText().toString());
-        postModel.setUri(imageUri.toString());
-        postModel.setPostId(UUID.randomUUID().toString());
-        databaseHelper.writePost(postModel);
-        Intent intent=new Intent(getActivity(),NetworkListActivity.class);
-        intent.putExtra("post", postModel);
-        startActivity(intent);
+        String titleTxt=title.getText().toString();
+        String descTxt=desc.getText().toString();
+        String postId=UUID.randomUUID().toString();
+        String imgUri=imageUri.toString();
+        presenter.AddPost(titleTxt, descTxt, imgUri, postId, new AddPostListener() {
+            @Override
+            public void onSuccess(PostModel postModel) {
+                Intent intent=new Intent(getActivity(),NetworkListActivity.class);
+                intent.putExtra("post", postModel);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getActivity(),"an error occured \n please check the fields !",Toast.LENGTH_SHORT);
+            }
+        });
+
     }
 
     public void openGallery(){

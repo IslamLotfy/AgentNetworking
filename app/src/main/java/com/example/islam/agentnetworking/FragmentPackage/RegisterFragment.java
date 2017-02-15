@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.example.islam.agentnetworking.ActivityPackage.LoginActivity;
 import com.example.islam.agentnetworking.CallBackPackage.AuthenticationListener;
+import com.example.islam.agentnetworking.CallBackPackage.RegisterListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.Authenticator;
 import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
+import com.example.islam.agentnetworking.Presenters.RegisterPresenter;
 import com.example.islam.agentnetworking.R;
 import com.example.islam.agentnetworking.ModelsPackage.UserModel;
 
@@ -31,15 +33,14 @@ public class RegisterFragment extends Fragment  {
     private Button signupButton;
     private EditText nameField1;
     private EditText nameField2;
-    private Authenticator authenticator;
     private ProgressDialog progressDialog;
     private String mail;
     private String pass;
     private String confirmPass;
     private String firstName;
     private String secondName;
-    private UserModel userModel;
-    private DatabaseHelper databaseHelper;
+    private RegisterPresenter presenter;
+
     public RegisterFragment() {
     }
 
@@ -53,8 +54,8 @@ public class RegisterFragment extends Fragment  {
         nameField1 =(EditText)view.findViewById(R.id.firstname);
         nameField2 =(EditText)view.findViewById(R.id.secondname);
         signupButton =(Button)view.findViewById(R.id.signupbtn);
-        progressDialog =new ProgressDialog(getContext());
-        databaseHelper = DatabaseHelper.getInstance();
+        progressDialog =new ProgressDialog(getActivity());
+        presenter=new RegisterPresenter();
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,43 +66,37 @@ public class RegisterFragment extends Fragment  {
     }
 
     public void signup() {
-        authenticator = Authenticator.getInstance();
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("please wait...");
+        progressDialog.show();
         mail = emailField.getText().toString();
         pass = passField.getText().toString();
         confirmPass = confirmField.getText().toString();
         firstName = nameField1.getText().toString();
         secondName = nameField2.getText().toString();
-        if (mail.equals("") || pass.equals("") || confirmPass.equals("")) {
-            Toast.makeText(getContext(), "please type your email and password !", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (!pass.equals(confirmPass)) {
-            Toast.makeText(getContext(), "please check your password and confirmation field !", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (pass.length() < 6) {
-            Toast.makeText(getContext(), "password should be at least 6 characters!", Toast.LENGTH_LONG).show();
-            return;
-        }
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("please wait...");
-        progressDialog.show();
-        authenticator.register(mail, pass, new AuthenticationListener() {
+        presenter.register(firstName, secondName, mail, pass, confirmPass, new RegisterListener() {
             @Override
-            public void onAuthSuccess() {
+            public void onRegisterSuccess() {
                 progressDialog.dismiss();
-                userModel =new UserModel(firstName, secondName, authenticator.getUserId(),"");
-                databaseHelper.writeUser(userModel);
-                Toast.makeText(getActivity(), "your are registered now",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "your are registered now",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
             }
 
             @Override
-            public void onAuthFailure() {
+            public void onRegisterFailure(int type) {
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), "an error occured \n please try again !",Toast.LENGTH_LONG).show();
+                switch (type){
+                    case 0:Toast.makeText(getActivity(), "an error occured \n please try again !",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:Toast.makeText(getActivity(), "please fill all the fields !", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:Toast.makeText(getActivity(), "please check your password and confirmation field !", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:Toast.makeText(getActivity(), "password should be at least 6 characters!", Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         });
     }

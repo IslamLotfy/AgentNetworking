@@ -13,12 +13,14 @@ import android.widget.Toast;
 
 import com.example.islam.agentnetworking.ActivityPackage.UsersListActivity;
 import com.example.islam.agentnetworking.CallBackPackage.AuthenticationListener;
+import com.example.islam.agentnetworking.CallBackPackage.NetworkListListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.Authenticator;
 import com.example.islam.agentnetworking.CallBackPackage.DataLoadedListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
 import com.example.islam.agentnetworking.ModelsPackage.ChoiceListModel;
 import com.example.islam.agentnetworking.ModelsPackage.NetworkModel;
 import com.example.islam.agentnetworking.ModelsPackage.PostModel;
+import com.example.islam.agentnetworking.Presenters.NetworkListPresenter;
 import com.example.islam.agentnetworking.R;
 import com.example.islam.agentnetworking.AdaptersPackage.RecyclerChoiceAdapter;
 import com.example.islam.agentnetworking.ModelsPackage.UserModel;
@@ -34,13 +36,13 @@ public class NetworkListActivityFragment extends Fragment  {
 
     private RecyclerView recyclerView;
     private List<ChoiceListModel> networks;
-    private Authenticator authenticator;
     private DatabaseHelper databaseHelper;
     private Button backButton;
     private Button nextButton;
     private Button skipButton;
     private List<NetworkModel> nets;
     private PostModel postModel;
+    private NetworkListPresenter presenter;
 
     public NetworkListActivityFragment() {
     }
@@ -58,18 +60,15 @@ public class NetworkListActivityFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         networks=new LinkedList<ChoiceListModel>();
-        authenticator = Authenticator.getInstance();
+        presenter=new NetworkListPresenter();
         databaseHelper = DatabaseHelper.getInstance();
         postModel=(PostModel) getActivity().getIntent().getSerializableExtra("post");
 
-        databaseHelper.readNetworks(new DataLoadedListener<NetworkModel>() {
+        presenter.readNetworks(new NetworkListListener() {
             @Override
-            public void onDataLoaded(List<NetworkModel> result) {
-                nets=result;
-                for(int i=0;i<result.size();i++){
-                    networks.add(result.get(i).getChoiceListModel());
-                }
-                RecyclerChoiceAdapter recyclerChoiceAdapter = new RecyclerChoiceAdapter(networks);
+            public void onNetworkRead(List<ChoiceListModel> nets) {
+                networks=nets;
+                RecyclerChoiceAdapter recyclerChoiceAdapter = new RecyclerChoiceAdapter(nets);
                 recyclerView.setAdapter(recyclerChoiceAdapter);
             }
         });
@@ -80,14 +79,7 @@ public class NetworkListActivityFragment extends Fragment  {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < networks.size(); i++) {
-                    NetworkModel networkModel = nets.get(i);
-                    networkModel.setChoiceListModel(networks.get(i));
-                    if (networkModel.getChoiceListModel().isSelected()) {
-                        networkModel.pushPosetId(postModel.getPostId());
-                        databaseHelper.writeNetwork(networkModel);
-                    }
-                }
+                presenter.updateNetworks(networks,postModel.getPostId());
                 nextOne();
             }
         });

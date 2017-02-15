@@ -12,18 +12,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.islam.agentnetworking.ActivityPackage.MainActivity;
-import com.example.islam.agentnetworking.ActivityPackage.UsersListActivity;
 import com.example.islam.agentnetworking.AdaptersPackage.RecyclerChoiceAdapter;
-import com.example.islam.agentnetworking.CallBackPackage.DataLoadedListener;
+import com.example.islam.agentnetworking.CallBackPackage.UsersListListener;
 import com.example.islam.agentnetworking.FirebaseHelpers.Authenticator;
 import com.example.islam.agentnetworking.FirebaseHelpers.DatabaseHelper;
 import com.example.islam.agentnetworking.ModelsPackage.ChoiceListModel;
-import com.example.islam.agentnetworking.ModelsPackage.NetworkModel;
 import com.example.islam.agentnetworking.ModelsPackage.PostModel;
 import com.example.islam.agentnetworking.ModelsPackage.UserModel;
+import com.example.islam.agentnetworking.Presenters.UsersListPresenter;
 import com.example.islam.agentnetworking.R;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,15 +31,13 @@ import java.util.List;
 public class UsersListActivityFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private List<ChoiceListModel> users;
-    private Authenticator authenticator;
-    private DatabaseHelper databaseHelper;
+    private List<ChoiceListModel> choiceListModels;
     private Button backButton;
     private Button nextButton;
     private Button skipButton;
     private UserModel userModel;
-    private List<UserModel> userModelList;
     private PostModel postModel;
+    private UsersListPresenter presenter;
 
     public UsersListActivityFragment() {
     }
@@ -58,48 +54,33 @@ public class UsersListActivityFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        users=new LinkedList<ChoiceListModel>();
-        userModelList=new LinkedList<UserModel>();
-        authenticator = Authenticator.getInstance();
-        databaseHelper = DatabaseHelper.getInstance();
-        databaseHelper.getUser(authenticator.getUserId(),new DataLoadedListener<UserModel>(){
+        choiceListModels =new LinkedList<ChoiceListModel>();
+        userModel=new UserModel();
+        presenter=new UsersListPresenter();
+        presenter.readUser(new UsersListListener.ReadUser() {
             @Override
-            public void onDataLoaded(List<UserModel> result) {
-                userModel=result.get(0);
+            public void onReadUser(UserModel user) {
+                userModel=user;
             }
         });
-        databaseHelper.readUsers(new DataLoadedListener<UserModel>() {
+
+        presenter.readUsersList(new UsersListListener.ReadusersList() {
             @Override
-            public void onDataLoaded(List<UserModel> result) {
-                userModelList = result;
-                for (int i = 0; i < result.size(); i++) {
-                    UserModel user=result.get(i);
-                    if (user.getNetwork().equals(userModel.getNetwork())) {
-                        users.add(user.getChoiceListModel());
-                    }
-                }
+            public void onReadUsersList(List<ChoiceListModel> users) {
+                choiceListModels=users;
                 RecyclerChoiceAdapter recyclerChoiceAdapter = new RecyclerChoiceAdapter(users);
                 recyclerView.setAdapter(recyclerChoiceAdapter);
             }
         });
 
-        RecyclerChoiceAdapter recyclerChoiceAdapter = new RecyclerChoiceAdapter(users);
+        RecyclerChoiceAdapter recyclerChoiceAdapter = new RecyclerChoiceAdapter(choiceListModels);
         recyclerView.setAdapter(recyclerChoiceAdapter);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 postModel=(PostModel) getActivity().getIntent().getSerializableExtra("post");
-                Toast.makeText(getActivity(),userModel.getEmail(),Toast.LENGTH_LONG).show();
-
-                for (int i = 0; i < users.size(); i++) {
-                    UserModel userModel1 = userModelList.get(i);
-                    userModel1.setChoiceListModel(users.get(i));
-                    if (userModel1.getChoiceListModel().isSelected()) {
-                        userModel1.pushPostId(postModel.getPostId());
-                        databaseHelper.writeUser(userModel1);
-                    }
-                }
+                presenter.updateUsers(choiceListModels,postModel.getPostId());
                 nextOne();
             }
         });
